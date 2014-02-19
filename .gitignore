@@ -1,0 +1,11 @@
+*.o
+*.lo
+*.map
+*.img
+.current
+.dependency.mk
+kaneton/kaneton
+kaneton/core/version.c
+environment/env.*
+environment/critical.pyc
+
