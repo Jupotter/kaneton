@@ -1,34 +1,3 @@
-export/data/snapshot/kaneton/machine/architecture/ia32/educational/include/context.h:30:  /* FIXME[code to complete] */
-export/data/snapshot/kaneton/machine/architecture/ia32/educational/include/context.h:44:  /* FIXME[code to complete] */
-export/data/snapshot/kaneton/machine/architecture/ia32/educational/paging.c:148:  /* FIXME[code to complete] */
-export/data/snapshot/kaneton/machine/architecture/ia32/educational/paging.c:162:  /* FIXME[code to complete] */
-export/data/snapshot/kaneton/machine/architecture/ia32/educational/pt.c:32:/* FIXME[complete if necessary] */
-export/data/snapshot/kaneton/machine/architecture/ia32/educational/environment.c:169:  /* FIXME[make the page directory provided by the boot loader the system's
-export/data/snapshot/kaneton/machine/architecture/ia32/educational/environment.c:178:  /* FIXME[create the mirroring entry by adding the page directory's
-export/data/snapshot/kaneton/machine/architecture/ia32/educational/environment.c:201:  /* FIXME[go through the registered regions and remove the
-export/data/snapshot/kaneton/machine/architecture/ia32/educational/environment.c:334:  /* FIXME[map the server's page directory, initialize it and
-export/data/snapshot/kaneton/machine/architecture/ia32/educational/environment.c:385:  /* FIXME[reserve a region for the system's IDT very much as for
-export/data/snapshot/kaneton/machine/architecture/ia32/educational/pd.c:30:/* FIXME[complete if necessary] */
-export/data/snapshot/kaneton/machine/architecture/ia32/educational/handler.c:24:/* FIXME[complete if necessary] */
-export/data/snapshot/kaneton/machine/architecture/ia32/educational/idt.c:34:/* FIXME[complete if necessary] */
-export/data/snapshot/kaneton/machine/architecture/ia32/educational/context.c:532:  /* FIXME[code to complete] */
-export/data/snapshot/kaneton/core/include/scheduler.h:198:  /* FIXME[code to complete] */
-export/data/snapshot/kaneton/core/scheduler/scheduler-mfq.c:154:  /* FIXME[code to complete] */
-export/data/snapshot/kaneton/core/scheduler/scheduler-mfq.c:167:  /* FIXME[code to complete] */
-export/data/snapshot/kaneton/core/scheduler/scheduler-mfq.c:188:  /* FIXME[code to complete] */
-export/data/snapshot/kaneton/core/scheduler/scheduler-mfq.c:199:  /* FIXME[code to complete] */
-export/data/snapshot/kaneton/core/scheduler/scheduler-mfq.c:210:  /* FIXME[code to complete] */
-export/data/snapshot/kaneton/core/scheduler/scheduler-mfq.c:230:  /* FIXME[code to complete] */
-kaneton/machine/architecture/ia32/educational/include/context.h:30:  /* FIXME[code to complete] */
-kaneton/machine/architecture/ia32/educational/include/context.h:44:  /* FIXME[code to complete] */
-kaneton/machine/architecture/ia32/educational/paging.c:148:  /* FIXME[code to complete] */
-kaneton/machine/architecture/ia32/educational/paging.c:162:  /* FIXME[code to complete] */
-kaneton/machine/architecture/ia32/educational/pt.c:32:/* FIXME[complete if necessary] */
-kaneton/machine/architecture/ia32/educational/environment.c:169:  /* FIXME[make the page directory provided by the boot loader the system's
-kaneton/machine/architecture/ia32/educational/environment.c:178:  /* FIXME[create the mirroring entry by adding the page directory's
-kaneton/machine/architecture/ia32/educational/environment.c:201:  /* FIXME[go through the registered regions and remove the
-kaneton/machine/architecture/ia32/educational/environment.c:334:  /* FIXME[map the server's page directory, initialize it and
-kaneton/machine/architecture/ia32/educational/environment.c:385:  /* FIXME[reserve a region for the system's IDT very much as for
 kaneton/machine/architecture/ia32/educational/pd.c:30:/* FIXME[complete if necessary] */
 kaneton/machine/architecture/ia32/educational/handler.c:24:/* FIXME[complete if necessary] */
 kaneton/machine/architecture/ia32/educational/idt.c:34:/* FIXME[complete if necessary] */
