@@ -75,6 +75,7 @@
  * ../event.c
  */
 
+t_status    glue_event_initialize(void);
 
 /*
  * eop

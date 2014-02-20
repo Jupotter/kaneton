@@ -31,7 +31,7 @@
  * the event dispatcher.
  */
 
-d_event			glue_event_dispatch =
+d_event                 glue_event_dispatch =
   {
     glue_event_show,
     glue_event_dump,
@@ -82,6 +82,10 @@ t_status                glue_event_release(i_event             id)
 
 t_status                glue_event_initialize(void)
 {
+    if (architecture_idt_initialize() != STATUS_OK)
+        MACHINE_ESCAPE("Unable to initialize the GDT");
+
+    MACHINE_LEAVE();
 }
 
 t_status                glue_event_clean(void)
