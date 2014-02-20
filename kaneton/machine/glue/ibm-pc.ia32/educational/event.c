@@ -46,34 +46,22 @@ d_event                 glue_event_dispatch =
 
 /* BEGIN FIXME[code to complete] */
 
-t_status                glue_event_show(i_event                id,
-                                        mt_margin              margin)
-{
-
-}
-
-t_status                glue_event_dump(void)
-{
-}
-
-t_status                glue_event_notify(i_event              id)
-{
-}
-
-t_status                glue_event_enable(void)
-{
-}
-
-t_status                glue_event_disable(void)
-{
-}
-
-t_status                glue_event_reserve(i_event             id,
+t_status                glue_event_reserve(i_event*             id,
                                            t_type              type,
                                            u_event_handler     handle,
                                            t_data              data)
 {
+    o_event*            o;
 
+    if (event_get(*id, &o) != STATUS_OK)
+        MACHINE_ESCAPE("unable to retrieve the event")
+
+    if (architucture_idt_clean() != STATUS_OK)
+        MACHINE_ESCAPE("this architecture can't be build");
+
+    o->machine.idt.flush = BOOLEAN_FALSE;
+
+    MACHINE_LEAVE();
 }
 
 t_status                glue_event_release(i_event             id)
