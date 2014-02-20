@@ -149,6 +149,12 @@ typedef struct
 }                       __attribute__ ((packed)) as_idtr;
 
 /*
+** ---------- globals ---------------------------------------------------------
+*/
+
+as_idt _idt;
+
+/*
  * ---------- prototypes ------------------------------------------------------
  *
  *      ../idt.c
@@ -158,9 +164,13 @@ typedef struct
  * ../idt.c
  */
 
+t_status    architecture_idt_dump(void);
+
 t_status    architecture_idt_build (t_paddr base,
                                     t_psize size,
                                     as_idt* idt);
+
+t_status    architecture_idt_initialize (void);
 
 /*
  * eop

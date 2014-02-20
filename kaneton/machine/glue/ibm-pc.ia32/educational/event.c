@@ -31,7 +31,7 @@
  * the event dispatcher.
  */
 
-d_event			glue_event_dispatch =
+d_event                 glue_event_dispatch =
   {
     NULL,
     NULL,
@@ -40,8 +40,14 @@ d_event			glue_event_dispatch =
     NULL,
     NULL,
     NULL,
-    NULL,
+    glue_event_initialize,
     NULL
   };
 
-/* FIXME[code to complete] */
+t_status    glue_event_initialize(void)
+{
+    if (architecture_idt_initialize() != STATUS_OK)
+        MACHINE_ESCAPE("Unable to initialize the GDT");
+
+    MACHINE_LEAVE();
+}

@@ -28,9 +28,22 @@
 #include <kaneton.h>
 
 /*
+ * ---------- externs ---------------------------------------------------------
+ */
+
+/*
  * ---------- functions -------------------------------------------------------
  */
 
+t_status    architecture_idt_dump(void)
+{
+    module_call(console, message,
+            '#', "IDT: table(0x%08x) size(%u)\n",
+            _idt.table,
+            _idt.size);
+
+    MACHINE_LEAVE();
+}
 /*
  * this function builds an IDT according to the given parameters.
  *
@@ -76,6 +89,18 @@ t_status    architecture_idt_build (t_paddr base,
     */
 
     memset(idt->table, 0x0, idt->size * sizeof (at_idte));
+
+    MACHINE_LEAVE();
+}
+
+t_status    architecture_idt_initialize (void)
+{
+    t_paddr ptr;
+    if (0 == (ptr = (t_paddr)malloc(256 * sizeof (at_idte))))
+        MACHINE_ESCAPE("Can't allocate space for the IDT");
+
+    if (!architecture_idt_build(ptr, 255, &_idt))
+        MACHINE_ESCAPE("Unable to build the IDT");
 
     MACHINE_LEAVE();
 }
