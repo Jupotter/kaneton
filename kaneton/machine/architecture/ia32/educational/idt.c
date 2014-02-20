@@ -158,7 +158,7 @@ t_status    architecture_idt_clear (t_id index)
     if (index >= ARCHITECTURE_IDT_SIZE)
         MACHINE_ESCAPE("Index out of bound");
 
-    _idt.table[index] &= ARCHITECTURE_IDTE_PRESENT_FALSE;
+    _idt.table[index].type &= (ARCHITECTURE_IDTE_PRESENT_FALSE >> 32);
 
     MACHINE_LEAVE();
 }
