@@ -21,4 +21,34 @@
  * ---------- functions -------------------------------------------------------
  */
 
-/* FIXME[complete if necessary] */
+void architecture_handler_default(void)
+{
+    __asm__("pusha");
+
+    __asm__("popa; leave; iret");
+}
+
+void architecture_handler_keyboard(void)
+{
+    __asm__("pusha");
+
+    printf("kayboard");
+
+    __asm__("popa; leave; iret");
+}
+
+void architecture_handler_clock(void)
+{
+    __asm__("pusha");
+
+    static int tic = 0;
+    static int sec = 0;
+    tic++;
+    if (tic % 100 == 0) {
+        sec++;
+        tic = 0;
+        printf("clock\n");
+    }
+
+    __asm__("popa; leave; iret");
+}

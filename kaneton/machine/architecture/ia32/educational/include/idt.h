@@ -20,6 +20,28 @@
 
 #define ARCHITECTURE_IDT_SIZE                   256
 
+#define ARCHITECTURE_IDTE_PRESENT               (1LL << 47)
+
+#define ARCHITECTURE_IDTE_DPL_ALL               ((0LL << 46) |      \
+                                                 (0LL << 45))
+
+#define ARCHITECTURE_IDTE_STORAGE               (0LL << 44)
+
+#define ARCHITECTURE_IDTE_TYPE_INT              ((1LL << 43) |      \
+                                                 (1LL << 42) |      \
+                                                 (1LL << 41) |      \
+                                                 (0LL << 40))
+#define ARCHITECTURE_IDTE_TYPE_TRAP             ((1LL << 43) |      \
+                                                 (1LL << 42) |      \
+                                                 (1LL << 41) |      \
+                                                 (1LL << 40))
+
+#define ARCHITECTURE_IDTE_INTGATE                                   \
+    (ARCHITECTURE_IDTE_PRESENT |                                    \
+     ARCHITECTURE_IDTE_DPL_ALL |                                    \
+     ARCHITECTURE_IDTE_STORAGE |                                    \
+     ARCHITECTURE_IDTE_TYPE_INT) >> 32
+
 /*
  * these macros define the base entry and the number of entries for the
  * several types of gate: IRQ, exception, IPI or syscall.
@@ -122,7 +144,13 @@
  * for more information, please refer to the IA32 hardware documentation.
  */
 
-typedef t_uint64        at_idte;
+typedef struct
+{
+    t_uint16     offset0_15;
+    t_uint16     select;
+    t_uint16     type;
+    t_uint16     offset16_32;
+}              __attribute__ ((packed)) at_idte;
 
 /*
  * the IDT descriptor i.e the structure for managing an IDT.
@@ -164,6 +192,11 @@ as_idt _idt;
  * ../idt.c
  */
 
+t_status    architecture_idt_create_desc (t_uint16 select,
+                                          t_uint32 offset,
+                                          t_uint16 type,
+                                          at_idte* desc);
+
 t_status    architecture_idt_dump(void);
 
 t_status    architecture_idt_build (t_paddr base,
@@ -171,6 +204,10 @@ t_status    architecture_idt_build (t_paddr base,
                                     as_idt* idt);
 
 t_status    architecture_idt_initialize (void);
+
+t_status    architecture_idt_load (as_idt* idt);
+
+t_status    architecture_idt_clean (void);
 
 /*
  * eop
