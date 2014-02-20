@@ -99,7 +99,7 @@ t_status    architecture_idt_initialize (void)
     if (0 == (ptr = (t_paddr)malloc(256 * sizeof (at_idte))))
         MACHINE_ESCAPE("Can't allocate space for the IDT");
 
-    if (!architecture_idt_build(ptr, 255, &_idt))
+    if (STATUS_OK != architecture_idt_build(ptr, 255, &_idt))
         MACHINE_ESCAPE("Unable to build the IDT");
 
     MACHINE_LEAVE();
