@@ -75,12 +75,18 @@
  * ../event.c
  */
 
+t_status    glue_event_enable(void);
+
 t_status    glue_event_reserve(i_event,
                                t_type,
                                u_event_handler,
                                t_data);
 
-t_status    glue_event_initialize(void);
+
+//t_status                glue_event_release(i_event);
+
+t_status                glue_event_initialize(void);
+//t_status                glue_event_clean(void);
 
 /*
  * eop

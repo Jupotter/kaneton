@@ -21,6 +21,7 @@
 #define ARCHITECTURE_IDT_SIZE                   256
 
 #define ARCHITECTURE_IDTE_PRESENT               (1LL << 47)
+#define ARCHITECTURE_IDTE_PRESENT_FALSE         (0LL << 47)
 
 #define ARCHITECTURE_IDTE_DPL_ALL               ((0LL << 46) |      \
                                                  (0LL << 45))
@@ -181,6 +182,7 @@ typedef struct
 */
 
 as_idt _idt;
+at_idte _idte[256];
 
 /*
  * ---------- prototypes ------------------------------------------------------
@@ -206,6 +208,8 @@ t_status    architecture_idt_build (t_paddr base,
 t_status    architecture_idt_initialize (void);
 
 t_status    architecture_idt_load (as_idt* idt);
+
+t_status    architecture_idt_clear (t_id index);
 
 t_status    architecture_idt_clean (void);
 

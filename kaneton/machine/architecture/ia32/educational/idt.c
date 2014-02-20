@@ -124,12 +124,9 @@ t_status    architecture_idt_load (as_idt* idt)
 
 t_status    architecture_idt_initialize (void)
 {
-    t_paddr ptr;
     int i;
-    if (0 == (ptr = (t_paddr)malloc(256 * sizeof (at_idte))))
-        MACHINE_ESCAPE("Can't allocate space for the IDT");
 
-    if (STATUS_OK != architecture_idt_build(ptr, 255, &_idt))
+    if (STATUS_OK != architecture_idt_build((t_paddr)_idte, 255, &_idt))
         MACHINE_ESCAPE("Unable to build the IDT");
 
     if(STATUS_OK != architecture_idt_load(&_idt))
@@ -152,6 +149,16 @@ t_status    architecture_idt_initialize (void)
             &(_idt.table[33]));
 
     asm("sti"::);
+
+    MACHINE_LEAVE();
+}
+
+t_status    architecture_idt_clear (t_id index)
+{
+    if (index >= ARCHITECTURE_IDT_SIZE)
+        MACHINE_ESCAPE("Index out of bound");
+
+    _idt.table[index].type &= (ARCHITECTURE_IDTE_PRESENT_FALSE >> 32);
 
     MACHINE_LEAVE();
 }
