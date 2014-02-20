@@ -35,6 +35,20 @@
  * ---------- functions -------------------------------------------------------
  */
 
+t_status    architecture_idt_create_desc (t_uint16 select,
+                                          t_uint32 offset,
+                                          t_uint16 type,
+                                          at_idte* desc)
+{
+    desc->offset0_15 = (offset & 0xffff);
+    desc->select = select;
+    desc->type = type;
+    desc->offset16_32 = (offset & 0xffff0000) >> 16;
+
+    MACHINE_LEAVE();
+}
+
+
 t_status    architecture_idt_dump(void)
 {
     module_call(console, message,
@@ -93,14 +107,59 @@ t_status    architecture_idt_build (t_paddr base,
     MACHINE_LEAVE();
 }
 
+t_status    architecture_idt_load (as_idt* idt)
+{
+    as_idtr idtr;
+
+    if (NULL == idt)
+        MACHINE_ESCAPE("The 'idt' argument is null");
+
+    idtr.address = (t_paddr)idt->table;
+    idtr.size = idt->size * sizeof (at_idte);
+
+    ARCHITECTURE_LIDT(idtr);
+
+    MACHINE_LEAVE();
+}
+
 t_status    architecture_idt_initialize (void)
 {
     t_paddr ptr;
+    int i;
     if (0 == (ptr = (t_paddr)malloc(256 * sizeof (at_idte))))
         MACHINE_ESCAPE("Can't allocate space for the IDT");
 
     if (STATUS_OK != architecture_idt_build(ptr, 255, &_idt))
         MACHINE_ESCAPE("Unable to build the IDT");
 
+    if(STATUS_OK != architecture_idt_load(&_idt))
+        MACHINE_ESCAPE("Unable to load the IDT in the processor");
+
+    for (i = 0; i < ARCHITECTURE_IDT_SIZE; i++)
+        architecture_idt_create_desc(0x08,
+                (t_uint32)architecture_handler_default,
+                ARCHITECTURE_IDTE_INTGATE,
+                &(_idt.table[i]));
+
+    architecture_idt_create_desc(0x08,
+            (t_uint32)architecture_handler_clock,
+            ARCHITECTURE_IDTE_INTGATE,
+            &(_idt.table[32]));
+
+    architecture_idt_create_desc(0x08,
+            (t_uint32)architecture_handler_keyboard,
+            ARCHITECTURE_IDTE_INTGATE,
+            &(_idt.table[33]));
+
+    asm("sti"::);
+
     MACHINE_LEAVE();
+}
+
+t_status    architecture_idt_clean (void)
+{
+    free(_idt.table);
+    _idt.table = NULL;
+    _idt.size = 0;
+    MACHINE_ESCAPE();
 }
