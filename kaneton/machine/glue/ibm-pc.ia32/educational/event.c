@@ -94,15 +94,17 @@ t_status                glue_event_reserve(i_event             id,
     o_event*            o;
 
     if (event_get(id, &o) != STATUS_OK)
-        MACHINE_ESCAPE("unable to retrieve the event")
+        MACHINE_ESCAPE("unable to retrieve the event");
 
-            if (architecture_idt_clear(id) != STATUS_OK)
-                MACHINE_ESCAPE("this architecture can't be build");
+    if (architecture_idt_clear(id) != STATUS_OK)
+        MACHINE_ESCAPE("this architecture can't be build");
+
+    if (architecture_idt_reserve(id, (t_uint32)handle.routine) != STATUS_OK)
+        MACHINE_ESCAPE("Unable to install the handler");
 
     module_call(console, message,
             '!', "Reserving event: %i\n",
             id);
-    //&o->machine.idt.flush = BOOLEAN_FALSE;
 
     MACHINE_LEAVE();
 }

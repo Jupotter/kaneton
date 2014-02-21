@@ -184,10 +184,24 @@ t_status    architecture_idt_clear(t_id index)
     MACHINE_LEAVE();
 }
 
+t_status    architecture_idt_reserve(t_id        index,
+                                     t_uint32    handler)
+{
+    if (index >= ARCHITECTURE_IDT_SIZE)
+        MACHINE_ESCAPE("Index out of bound");
+
+    architecture_idt_create_desc(0x08,
+            handler,
+            ARCHITECTURE_IDTE_INTGATE,
+            &(_idt.table[index]));
+
+    MACHINE_LEAVE();
+}
+
 t_status    architecture_idt_clean(void)
 {
     free(_idt.table);
     _idt.table = NULL;
     _idt.size = 0;
-    MACHINE_ESCAPE();
+    MACHINE_LEAVE();
 }

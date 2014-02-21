@@ -78,16 +78,16 @@
 t_status glue_event_dump(void);
 
 t_status                glue_event_show(i_event                id,
-                                        mt_margin              margin);
+        mt_margin              margin);
 
 t_status                glue_event_enable(void);
 
 t_status                glue_event_disable(void);
 
 t_status                glue_event_reserve(i_event             id,
-                                           t_type              type,
-                                           u_event_handler     handle,
-                                           t_data              data);
+        t_type              type,
+        u_event_handler     handle,
+        t_data              data);
 
 t_status                glue_event_release(i_event  id);
 

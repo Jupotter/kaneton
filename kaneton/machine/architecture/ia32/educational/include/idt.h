@@ -218,6 +218,9 @@ t_status    architecture_idt_initialize(void);
 
 t_status    architecture_idt_clear(t_id index);
 
+t_status    architecture_idt_reserve(t_id        index,
+                                     t_uint32    handler);
+
 t_status    architecture_idt_clean(void);
 
 
