@@ -194,24 +194,25 @@ at_idte _idte[256];
  * ../idt.c
  */
 
-t_status    architecture_idt_create_desc (t_uint16 select,
-                                          t_uint32 offset,
-                                          t_uint16 type,
-                                          at_idte* desc);
+t_status    architecture_idt_create_desc(t_uint16 select,
+                                         t_uint32 offset,
+                                         t_uint16 type,
+                                         at_idte* desc);
 
 t_status    architecture_idt_dump(void);
 
-t_status    architecture_idt_build (t_paddr base,
-                                    t_psize size,
-                                    as_idt* idt);
+t_status    architecture_idt_build(t_paddr base,
+                                   t_psize size,
+                                   as_idt* idt);
 
-t_status    architecture_idt_initialize (void);
+t_status    architecture_idt_load(as_idt* idt);
 
-t_status    architecture_idt_load (as_idt* idt);
+t_status    architecture_idt_initialize(void);
 
-t_status    architecture_idt_clear (t_id index);
+t_status    architecture_idt_clear(t_id index);
 
-t_status    architecture_idt_clean (void);
+t_status    architecture_idt_clean(void);
+
 
 /*
  * eop

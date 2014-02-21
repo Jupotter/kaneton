@@ -76,8 +76,11 @@
  */
 
 t_status                glue_event_release(i_event             id);
-t_status    glue_event_initialize(void);
+
+t_status                glue_event_initialize(void);
+
 t_status                glue_event_clean(void);
+
 
 /*
  * eop

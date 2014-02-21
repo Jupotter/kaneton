@@ -25,6 +25,9 @@ void architecture_handler_default(void)
 {
     __asm__("pusha");
 
+    module_call(console, message,
+            '+', "Interrupt\n");
+
     __asm__("popa; leave; iret");
 }
 
@@ -32,7 +35,8 @@ void architecture_handler_keyboard(void)
 {
     __asm__("pusha");
 
-    printf("kayboard");
+    module_call(console, message,
+            '+', "keyboard\n");
 
     __asm__("popa; leave; iret");
 }
@@ -47,7 +51,8 @@ void architecture_handler_clock(void)
     if (tic % 100 == 0) {
         sec++;
         tic = 0;
-        printf("clock\n");
+        module_call(console, message,
+                '+', "clock\n");
     }
 
     __asm__("popa; leave; iret");

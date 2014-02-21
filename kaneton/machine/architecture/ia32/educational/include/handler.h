@@ -59,6 +59,7 @@ void architecture_handler_keyboard(void);
 
 void architecture_handler_clock(void);
 
+
 /*
  * eop
  */
