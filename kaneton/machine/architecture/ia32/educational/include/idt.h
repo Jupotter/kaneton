@@ -127,6 +127,13 @@
 #define ARCHITECTURE_IDT_IRQ_ATA2                                       \
   ARCHITECTURE_IDT_IRQ_BASE + 15
 
+/*
+ * ---------- macro functions -------------------------------------------------
+ */
+
+#define ARCHITECTURE_IDTE_OFFSET_GET(_idte_)                            \
+    (t_paddr)(((_idte_).offset0_15 & 0xffff) |                          \
+              (((_idte_).offset16_32 << 16) & 0xffff0000))
 
 /*
  * ---------- dependencies ----------------------------------------------------

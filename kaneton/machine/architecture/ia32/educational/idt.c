@@ -41,9 +41,9 @@ t_status    architecture_idt_create_desc(t_uint16 select,
                                          at_idte* desc)
 {
     desc->offset0_15 = (offset & 0xffff);
+    desc->offset16_32 = (offset & 0xffff0000) >> 16;
     desc->select = select;
     desc->type = type;
-    desc->offset16_32 = (offset & 0xffff0000) >> 16;
 
     MACHINE_LEAVE();
 }
@@ -51,10 +51,31 @@ t_status    architecture_idt_create_desc(t_uint16 select,
 
 t_status    architecture_idt_dump(void)
 {
+    int i;
     module_call(console, message,
             '#', "IDT: table(0x%08x) size(%u)\n",
             _idt.table,
             _idt.size);
+
+    for (i = 0; i < _idt.size; i++)
+    {
+        t_uint16        select;
+        t_paddr         offset;
+        t_uint16        type;
+
+//        if (!(((t_uint64)(_idt.table[i].type) << 32)
+//                    & ARCHITECTURE_IDTE_PRESENT))
+//            continue;
+
+        offset = ARCHITECTURE_IDTE_OFFSET_GET(_idt.table[i]);
+        select = _idt.table[i].select;
+        type   = _idt.table[i].type;
+
+        module_call(console, message,
+                '#', "  %u: offset(0x%08x) selector(0x%04x) "
+                "type(0x%04x)\n",
+                i, offset, select, type);
+    }
 
     MACHINE_LEAVE();
 }
@@ -96,7 +117,7 @@ t_status    architecture_idt_build(t_paddr base,
     */
 
     idt->table = (at_idte*)base;
-    idt->size = size / sizeof (at_idte);
+    idt->size = size;
 
     /*
     ** 3)
