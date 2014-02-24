@@ -4,6 +4,7 @@
 *.img
 .current
 .dependency.mk
+export/
 kaneton/kaneton
 kaneton/core/version.c
 environment/env.*
