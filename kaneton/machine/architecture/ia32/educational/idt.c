@@ -38,8 +38,8 @@ extern t_uint32    _idt_exception_wrapper[ARCHITECTURE_IDT_SIZE];
 */
 
 __asm__("                                                               \
-.irp id, 0,1,2,3,4,5,6,7,9,10,11,12,13,14,15,                       \
-    16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31                   \n\
+.irp id, 0,1,2,3,4,5,6,7,9,15,                                          \
+    16,18,19,20,21,22,23,24,25,26,27,28,29,30,31                      \n\
                                                                       \n\
 idt_exception_wrapper_\\id:                                           \n\
     pusha                                                             \n\
@@ -50,6 +50,35 @@ idt_exception_wrapper_\\id:                                           \n\
     push %gs                                                          \n\
                                                                       \n\
     pushl $0                                                          \n\
+    pushl $\\id                                                       \n\
+    leal _event_handler_array, %edi                                   \n\
+    mov $\\id, %eax                                                   \n\
+    shl $2, %eax                                                      \n\
+    call *(%edi, %eax)                                                \n\
+    addl $4, %esp                                                     \n\
+    addl $4, %esp                                                     \n\
+                                                                      \n\
+    pop %gs                                                           \n\
+    pop %fs                                                           \n\
+    pop %es                                                           \n\
+    pop %ds                                                           \n\
+    pop %ss                                                           \n\
+    popa                                                              \n\
+    iret                                                              \n\
+                                                                      \n\
+.endr                                                                 \n\
+                                                                      \n\
+.irp id, 10,11,12,13,14,17                                            \n\
+idt_exception_wrapper_\\id:                                           \n\
+                                                                      \n\
+    pusha                                                             \n\
+    push %ss                                                          \n\
+    push %ds                                                          \n\
+    push %es                                                          \n\
+    push %fs                                                          \n\
+    push %gs                                                          \n\
+                                                                      \n\
+    pushl %eax                                                        \n\
     pushl $\\id                                                       \n\
     leal _event_handler_array, %edi                                   \n\
     mov $\\id, %eax                                                   \n\
