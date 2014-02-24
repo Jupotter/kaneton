@@ -43,7 +43,7 @@ t_status architecture_handler_setup(void)
 }
 
 t_status architecture_handler_reserve(i_event id,
-                                      t_event_routine handler)
+                                      t_event_handler handler)
 {
     if (id >= ARCHITECTURE_HANDLER_SIZE)
         MACHINE_ESCAPE("Index out of bound: %i", id);
