@@ -249,7 +249,7 @@ t_status    architecture_idt_build(t_paddr base,
     if (NULL == idt)
         MACHINE_ESCAPE("The 'idt' argument is null");
 
-    if (size > (ARCHITECTURE_IDT_SIZE))
+    if (size > (ARCHITECTURE_IDT_MAX_SIZE))
         MACHINE_ESCAPE("the given size is too large as exceeding the IDT's "
                 "theoretically maximum capacity");
 
@@ -296,7 +296,7 @@ t_status    architecture_idt_initialize(void)
     int i;
 
     if (STATUS_OK != architecture_idt_build((t_paddr)_idte,
-                ARCHITECTURE_IDT_SIZE, &_idt))
+                ARCHITECTURE_IDT_MAX_SIZE, &_idt))
         MACHINE_ESCAPE("Unable to build the IDT");
 
     if(STATUS_OK != architecture_idt_load(&_idt))

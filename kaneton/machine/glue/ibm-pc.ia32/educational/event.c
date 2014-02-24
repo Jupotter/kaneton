@@ -33,7 +33,7 @@
 
 d_event                 glue_event_dispatch =
 {
-    glue_event_show,
+    NULL,
     glue_event_dump,
     NULL,
     glue_event_enable,
@@ -52,23 +52,6 @@ t_status glue_event_dump(void)
 }
 
 /* BEGIN FIXME[code to complete] */
-
-t_status                glue_event_show(i_event                id,
-        mt_margin              margin)
-{
-//    o_event*            o;
-
-    //    if (event_get(id, &o) != STATUS_OK)
-    //        MACHINE_ESCAPE("unable to retrieve the event object");
-
-    module_call(console, message,
-            '#',
-            MODULE_CONSOLE_MARGIN_FORMAT
-            " machine:\n",
-            MODULE_CONSOLE_MARGIN_VALUE(margin));
-
-    MACHINE_LEAVE();
-}
 
 t_status                glue_event_enable(void)
 {
@@ -90,11 +73,6 @@ t_status                glue_event_reserve(i_event             id,
         u_event_handler     handle,
         t_data              data)
 {
-    o_event*            o;
-
-    if (event_get(id, &o) != STATUS_OK)
-        MACHINE_ESCAPE("unable to retrieve the event");
-
     if (architecture_handler_reserve(id, handle.routine) != STATUS_OK)
         MACHINE_ESCAPE("Unable to install the handler");
 
