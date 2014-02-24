@@ -15,6 +15,12 @@
 #define ARCHITECTURE_HANDLER_H	1
 
 /*
+** ---------- dependencies ----------------------------------------------------
+*/
+
+// #include <core/event.h>
+
+/*
  * ---------- macros ----------------------------------------------------------
  */
 
@@ -44,6 +50,19 @@
 #define ARCHITECTURE_HANDLER_KIS_SIZE	2 * ___kaneton$pagesz
 
 /*
+** ---------- types -----------------------------------------------------------
+*/
+
+typedef void (*t_event_routine)(i_event,
+                                t_data);
+
+/*
+** ---------- globals ---------------------------------------------------------
+*/
+
+t_event_routine _event_handler_array[256];
+
+/*
  * ---------- prototypes ------------------------------------------------------
  *
  *	../handler.c
@@ -53,11 +72,18 @@
  * ../handler.c
  */
 
-void architecture_handler_default(void);
+void architecture_handler_default(i_event id, t_data data);
 
-void architecture_handler_keyboard(void);
+void architecture_handler_keyboard(i_event id, t_data data);
 
 void architecture_handler_clock(void);
+
+t_status architecture_handler_setup(void);
+
+t_status architecture_handler_reserve(i_event id,
+                                      t_event_routine handler);
+
+t_status architecture_handler_release(i_event id);
 
 
 /*

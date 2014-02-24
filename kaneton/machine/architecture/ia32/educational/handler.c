@@ -21,24 +21,18 @@
  * ---------- functions -------------------------------------------------------
  */
 
-void architecture_handler_default(void)
+void architecture_handler_default(i_event id, t_data data)
 {
-    __asm__("pusha");
-
     module_call(console, message,
-            '+', "Interrupt\n");
-
-    __asm__("popa; leave; iret");
+            '+', "Interrupt: 0x%x\n",
+            id);
 }
 
-void architecture_handler_keyboard(void)
+void architecture_handler_keyboard(i_event id, t_data data)
 {
-    __asm__("pusha");
-
     module_call(console, message,
             '+', "keyboard\n");
-
-    __asm__("popa; leave; iret");
+    platform_pic_acknowledge(1);
 }
 
 void architecture_handler_clock(void)
@@ -57,3 +51,36 @@ void architecture_handler_clock(void)
 
     __asm__("popa; leave; iret");
 }
+
+t_status architecture_handler_setup(void)
+{
+    int i;
+    for (i = 0; i < 256; i++)
+        _event_handler_array[i] = architecture_handler_default;
+
+    MACHINE_LEAVE();
+}
+
+t_status architecture_handler_reserve(i_event id,
+                                      t_event_routine handler)
+{
+    if (id >= ARCHITECTURE_HANDLER_SIZE)
+        MACHINE_ESCAPE("Index out of bound: %i", id);
+
+    _event_handler_array[id] = handler;
+
+    MACHINE_LEAVE();
+}
+
+t_status architecture_handler_release(i_event id)
+{
+    if (id >= ARCHITECTURE_HANDLER_SIZE)
+        MACHINE_ESCAPE("Index out of bound");
+
+    _event_handler_array[id] = architecture_handler_default;
+
+    MACHINE_LEAVE();
+}
+
+
+

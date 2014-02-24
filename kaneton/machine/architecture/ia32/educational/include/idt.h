@@ -18,7 +18,11 @@
  * ---------- macros ----------------------------------------------------------
  */
 
-#define ARCHITECTURE_IDT_SIZE                   256
+#define ARCHITECTURE_IDT_SIZE \
+    (ARCHITECTURE_IDT_EXCEPTION_SIZE +                                  \
+     ARCHITECTURE_IDT_IRQ_SIZE +                                        \
+     ARCHITECTURE_IDT_IPI_SIZE +                                        \
+     ARCHITECTURE_IDT_SYSCALL_SIZE)
 
 #define ARCHITECTURE_IDTE_PRESENT               (1LL << 47)
 #define ARCHITECTURE_IDTE_PRESENT_FALSE         (0LL << 47)
@@ -188,8 +192,8 @@ typedef struct
 ** ---------- globals ---------------------------------------------------------
 */
 
-as_idt _idt;
-at_idte _idte[256];
+as_idt      _idt;
+at_idte     _idte[256];
 
 /*
  * ---------- prototypes ------------------------------------------------------
@@ -215,11 +219,6 @@ t_status    architecture_idt_build(t_paddr base,
 t_status    architecture_idt_load(as_idt* idt);
 
 t_status    architecture_idt_initialize(void);
-
-t_status    architecture_idt_clear(t_id index);
-
-t_status    architecture_idt_reserve(t_id        index,
-                                     t_uint32    handler);
 
 t_status    architecture_idt_clean(void);
 

@@ -72,8 +72,15 @@ t_status                glue_event_show(i_event                id,
 
 t_status                glue_event_enable(void)
 {
+    int i;
     module_call(console, message,
             '!', "Enabling events\n");
+
+    platform_pic_initialize();
+    for (i = 0; i < 8; i++)
+        platform_pic_enable(i);
+    ARCHITECTURE_STI();
+    __asm__("int $32");
 
     MACHINE_LEAVE();
 }
@@ -82,6 +89,9 @@ t_status                glue_event_disable(void)
 {
     module_call(console, message,
             '!', "Disabling events\n");
+
+    platform_pic_clean();
+    ARCHITECTURE_CLI();
 
     MACHINE_LEAVE();
 }
@@ -96,10 +106,7 @@ t_status                glue_event_reserve(i_event             id,
     if (event_get(id, &o) != STATUS_OK)
         MACHINE_ESCAPE("unable to retrieve the event");
 
-    if (architecture_idt_clear(id) != STATUS_OK)
-        MACHINE_ESCAPE("this architecture can't be build");
-
-    if (architecture_idt_reserve(id, (t_uint32)handle.routine) != STATUS_OK)
+    if (architecture_handler_reserve(id, handle.routine) != STATUS_OK)
         MACHINE_ESCAPE("Unable to install the handler");
 
     module_call(console, message,
@@ -121,8 +128,10 @@ t_status                glue_event_release(i_event  id)
 t_status                glue_event_initialize(void)
 {
     if (architecture_idt_initialize() != STATUS_OK)
-        MACHINE_ESCAPE("Unable to initialize the GDT");
+        MACHINE_ESCAPE("Unable to initialize the IDT");
 
+    if (architecture_handler_setup() != STATUS_OK)
+        MACHINE_ESCAPE("Unable to setup the handlers");
 
     MACHINE_LEAVE();
 }
