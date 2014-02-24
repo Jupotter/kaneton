@@ -23,33 +23,14 @@
 
 void architecture_handler_default(i_event id, t_data data)
 {
-    module_call(console, message,
-            '+', "Interrupt: 0x%x\n",
-            id);
+    return;
 }
 
 void architecture_handler_keyboard(i_event id, t_data data)
 {
     module_call(console, message,
-            '+', "keyboard\n");
-    platform_pic_acknowledge(1);
-}
-
-void architecture_handler_clock(void)
-{
-    __asm__("pusha");
-
-    static int tic = 0;
-    static int sec = 0;
-    tic++;
-    if (tic % 100 == 0) {
-        sec++;
-        tic = 0;
-        module_call(console, message,
-                '+', "clock\n");
-    }
-
-    __asm__("popa; leave; iret");
+            '+', "Interrupt: 0x%x\n",
+            id);
 }
 
 t_status architecture_handler_setup(void)

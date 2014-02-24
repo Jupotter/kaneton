@@ -39,7 +39,7 @@ d_event                 glue_event_dispatch =
     glue_event_enable,
     glue_event_disable,
     glue_event_reserve,
-    NULL,
+    glue_event_release,
     glue_event_initialize,
     NULL
 };
@@ -72,13 +72,6 @@ t_status                glue_event_show(i_event                id,
 
 t_status                glue_event_enable(void)
 {
-    int i;
-    module_call(console, message,
-            '!', "Enabling events\n");
-
-    platform_pic_initialize();
-    for (i = 0; i < 8; i++)
-        platform_pic_enable(i);
     ARCHITECTURE_STI();
     __asm__("int $32");
 
@@ -87,10 +80,6 @@ t_status                glue_event_enable(void)
 
 t_status                glue_event_disable(void)
 {
-    module_call(console, message,
-            '!', "Disabling events\n");
-
-    platform_pic_clean();
     ARCHITECTURE_CLI();
 
     MACHINE_LEAVE();
@@ -109,29 +98,30 @@ t_status                glue_event_reserve(i_event             id,
     if (architecture_handler_reserve(id, handle.routine) != STATUS_OK)
         MACHINE_ESCAPE("Unable to install the handler");
 
-    module_call(console, message,
-            '!', "Reserving event: %i\n",
-            id);
-
     MACHINE_LEAVE();
 }
 
 t_status                glue_event_release(i_event  id)
 {
-    module_call(console, message,
-            '!', "Releasing event: %i\n",
-            id);
-
+    if (architecture_handler_release(id) != STATUS_OK)
+        MACHINE_ESCAPE("Unable to release the handler");
     MACHINE_LEAVE();
 }
 
 t_status                glue_event_initialize(void)
 {
+    int i;
     if (architecture_idt_initialize() != STATUS_OK)
         MACHINE_ESCAPE("Unable to initialize the IDT");
 
     if (architecture_handler_setup() != STATUS_OK)
         MACHINE_ESCAPE("Unable to setup the handlers");
+
+    if (platform_pic_initialize()!= STATUS_OK)
+        MACHINE_ESCAPE("Unable to initialize the PIC");
+    for (i = 0; i < 8; i++)
+        if (platform_pic_enable(i) != STATUS_OK)
+            MACHINE_ESCAPE("Unable to initialize the PIC");
 
     MACHINE_LEAVE();
 }
