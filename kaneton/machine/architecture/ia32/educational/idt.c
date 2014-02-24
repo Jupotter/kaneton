@@ -43,6 +43,11 @@ __asm__("                                                               \
                                                                       \n\
 idt_exception_wrapper_\\id:                                           \n\
     pusha                                                             \n\
+    push %ss                                                          \n\
+    push %ds                                                          \n\
+    push %es                                                          \n\
+    push %fs                                                          \n\
+    push %gs                                                          \n\
                                                                       \n\
     pushl $0                                                          \n\
     pushl $\\id                                                       \n\
@@ -53,6 +58,11 @@ idt_exception_wrapper_\\id:                                           \n\
     addl $4, %esp                                                     \n\
     addl $4, %esp                                                     \n\
                                                                       \n\
+    pop %gs                                                           \n\
+    pop %fs                                                           \n\
+    pop %es                                                           \n\
+    pop %ds                                                           \n\
+    pop %ss                                                           \n\
     popa                                                              \n\
     iret                                                              \n\
                                                                       \n\
@@ -68,6 +78,11 @@ idt_exception_wrapper_\\id:                                           \n\
                                                                       \n\
 idt_exception_wrapper_\\id:                                           \n\
     pusha                                                             \n\
+    push %ss                                                          \n\
+    push %ds                                                          \n\
+    push %es                                                          \n\
+    push %fs                                                          \n\
+    push %gs                                                          \n\
                                                                       \n\
     movb $0x20, %al                                                   \n\
     outb %al, $0x20                                                   \n\
@@ -81,6 +96,11 @@ idt_exception_wrapper_\\id:                                           \n\
     addl $4, %esp                                                     \n\
     addl $4, %esp                                                     \n\
                                                                       \n\
+    pop %gs                                                           \n\
+    pop %fs                                                           \n\
+    pop %es                                                           \n\
+    pop %ds                                                           \n\
+    pop %ss                                                           \n\
     popa                                                              \n\
     iret                                                              \n\
                                                                       \n\
@@ -90,6 +110,11 @@ idt_exception_wrapper_\\id:                                           \n\
                                                                       \n\
 idt_exception_wrapper_\\id:                                           \n\
     pusha                                                             \n\
+    push %ss                                                          \n\
+    push %ds                                                          \n\
+    push %es                                                          \n\
+    push %fs                                                          \n\
+    push %gs                                                          \n\
                                                                       \n\
     pushl $0                                                          \n\
     pushl $\\id                                                       \n\
@@ -100,6 +125,11 @@ idt_exception_wrapper_\\id:                                           \n\
     addl $4, %esp                                                     \n\
     addl $4, %esp                                                     \n\
                                                                       \n\
+    pop %gs                                                           \n\
+    pop %fs                                                           \n\
+    pop %es                                                           \n\
+    pop %ds                                                           \n\
+    pop %ss                                                           \n\
     popa                                                              \n\
     iret                                                              \n\
                                                                       \n\
