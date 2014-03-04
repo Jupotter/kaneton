@@ -12,7 +12,7 @@
  */
 
 #ifndef GLUE_AS_H
-#define GLUE_AS_H		1
+#define GLUE_AS_H               1
 
 /*
  * ---------- macro functions -------------------------------------------------
@@ -22,41 +22,41 @@
  * this macro-function defines the address space dispatcher.
  */
 
-#define		machine_include_as()					\
-  extern d_as			glue_as_dispatch
+#define         machine_include_as()                                    \
+  extern d_as                   glue_as_dispatch
 
 /*
  * this macro-function dispatches the address space calls.
  */
 
-#define		machine_call_as(_function_, _args_...)			\
-  (									\
-    {									\
-      t_status _r_ = STATUS_OK;						\
-									\
-      if (glue_as_dispatch.as_ ## _function_ != NULL)			\
-        _r_ = glue_as_dispatch.as_ ## _function_(_args_);		\
-									\
-      _r_;								\
-    }									\
+#define         machine_call_as(_function_, _args_...)                  \
+  (                                                                     \
+    {                                                                   \
+      t_status _r_ = STATUS_OK;                                         \
+                                                                        \
+      if (glue_as_dispatch.as_ ## _function_ != NULL)                   \
+        _r_ = glue_as_dispatch.as_ ## _function_(_args_);               \
+                                                                        \
+      _r_;                                                              \
+    }                                                                   \
   )
 
 /*
  * this macro-function includes data in the 'm_as' type.
  */
 
-#define		machine_data_m_as()
+#define         machine_data_m_as()
 
 /*
  * this macro-function includes data in the address space object 'o_as':
  * the address space IA32-specific PD - Page directory's location.
  */
 
-#define		machine_data_o_as()					\
-  struct								\
-  {									\
-    t_paddr		pd;						\
-  }			machine;
+#define         machine_data_o_as()                                     \
+  struct                                                                \
+  {                                                                     \
+    t_paddr             pd;                                             \
+  }                     machine;
 
 /*
  * ---------- dependencies ----------------------------------------------------
@@ -74,8 +74,8 @@
  * ../as.c
  */
 
-t_status		glue_as_reserve(i_task			task,
-					i_as*			as);
+t_status                glue_as_reserve(i_task                  task,
+                                        i_as*                   as);
 
 
 /*

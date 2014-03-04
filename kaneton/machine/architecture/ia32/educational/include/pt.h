@@ -12,7 +12,7 @@
  */
 
 #ifndef ARCHITECTURE_PT_H
-#define ARCHITECTURE_PT_H	1
+#define ARCHITECTURE_PT_H       1
 
 /*
  * ---------- macros ----------------------------------------------------------
@@ -22,7 +22,7 @@
  * defines the number entries composing a page table.
  */
 
-#define ARCHITECTURE_PT_SIZE		1024
+#define ARCHITECTURE_PT_SIZE            1024
 
 /*
  * ---------- dependencies ----------------------------------------------------

@@ -12,7 +12,7 @@
  */
 
 #ifndef ARCHITECTURE_PD_H
-#define ARCHITECTURE_PD_H	1
+#define ARCHITECTURE_PD_H       1
 
 /*
  * ---------- macros ----------------------------------------------------------
@@ -23,7 +23,7 @@
  * entry i.e the entry referencing the page directory itself.
  */
 
-#define ARCHITECTURE_PD_MIRROR		1023
+#define ARCHITECTURE_PD_MIRROR          1023
 
 /*
  * ---------- dependencies ----------------------------------------------------

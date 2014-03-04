@@ -33,8 +33,8 @@
  * the region dispatcher.
  */
 
-d_region		glue_region_dispatch =
-  {
+d_region                glue_region_dispatch =
+{
     NULL,
     NULL,
     NULL,
@@ -46,4 +46,4 @@ d_region		glue_region_dispatch =
     NULL,
     NULL,
     NULL
-  };
+};

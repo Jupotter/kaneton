@@ -12,7 +12,7 @@
  */
 
 #ifndef ARCHITECTURE_PAGING_H
-#define ARCHITECTURE_PAGING_H	1
+#define ARCHITECTURE_PAGING_H   1
 
 /*
  * ---------- macro-functions -------------------------------------------------
@@ -23,7 +23,7 @@
  * entries.
  */
 
-#define ARCHITECTURE_PAGING_ADDRESS(_pdei_, _ptei_)			\
+#define ARCHITECTURE_PAGING_ADDRESS(_pdei_, _ptei_)                     \
   (t_vaddr)(((_pdei_) << 22) | ((_ptei_) << 12))
 
 /*
@@ -37,43 +37,43 @@
 /*
  * ---------- prototypes ------------------------------------------------------
  *
- *	../paging.c
+ *      ../paging.c
  */
 
 /*
  * ../paging.c
  */
 
-t_status		architecture_paging_pdbr(t_paddr	pd,
-						 t_flags	flags,
-						 at_cr3*	pdbr);
+t_status                architecture_paging_pdbr(t_paddr        pd,
+                                                 t_flags        flags,
+                                                 at_cr3*        pdbr);
 
-t_status		architecture_paging_map(i_as		id,
-						i_segment	segment,
-						t_paddr		offset,
-						t_options	options,
-						t_vaddr		address,
-						t_vsize		size);
+t_status                architecture_paging_map(i_as            id,
+                                                i_segment       segment,
+                                                t_paddr         offset,
+                                                t_options       options,
+                                                t_vaddr         address,
+                                                t_vsize         size);
 
-t_status		architecture_paging_unmap(i_as		id,
-						  t_vaddr	address,
-						  t_vsize	size);
+t_status                architecture_paging_unmap(i_as          id,
+                                                  t_vaddr       address,
+                                                  t_vsize       size);
 
-t_status		architecture_paging_read(i_segment	id,
-						 t_paddr	offset,
-						 void*		buffer,
-						 t_psize	size);
+t_status                architecture_paging_read(i_segment      id,
+                                                 t_paddr        offset,
+                                                 void*          buffer,
+                                                 t_psize        size);
 
-t_status		architecture_paging_write(i_segment	id,
-						  t_paddr	offset,
-						  const void*	buffer,
-						  t_psize	size);
+t_status                architecture_paging_write(i_segment     id,
+                                                  t_paddr       offset,
+                                                  const void*   buffer,
+                                                  t_psize       size);
 
-t_status		architecture_paging_copy(i_region	dst,
-						 t_paddr	to,
-						 i_region	src,
-						 t_paddr	from,
-						 t_psize	size);
+t_status                architecture_paging_copy(i_region       dst,
+                                                 t_paddr        to,
+                                                 i_region       src,
+                                                 t_paddr        from,
+                                                 t_psize        size);
 
 
 /*

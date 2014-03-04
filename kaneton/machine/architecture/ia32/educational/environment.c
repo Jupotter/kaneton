@@ -39,31 +39,31 @@
  * the init structure.
  */
 
-extern s_init*		_init;
+extern s_init*          _init;
 
 /*
  * the kernel manager.
  */
 
-extern m_kernel		_kernel;
+extern m_kernel         _kernel;
 
 /*
  * the thread manager.
  */
 
-extern m_thread		_thread;
+extern m_thread         _thread;
 
 /*
  * the segment manager.
  */
 
-extern m_segment	_segment;
+extern m_segment        _segment;
 
 /*
  * the architecture manager.
  */
 
-extern am		_architecture;
+extern am               _architecture;
 
 /*
  * ---------- functions -------------------------------------------------------
@@ -132,141 +132,141 @@ extern am		_architecture;
  *     an interrupt occurs.
  */
 
-t_status		architecture_environment_kernel(i_as	id)
+t_status                architecture_environment_kernel(i_as    id)
 {
-  i_region		useless;
-  at_cr3		pdbr;
-  o_as*			as;
-  o_region*		r;
+    i_region              useless;
+    at_cr3                pdbr;
+    o_as*                 as;
+    o_region*             r;
 
-  /*
-   * 1)
-   */
+    /*
+     * 1)
+     */
 
-  if (as_get(id, &as) != STATUS_OK)
-    MACHINE_ESCAPE("unable to retrieve the address space object");
+    if (as_get(id, &as) != STATUS_OK)
+        MACHINE_ESCAPE("unable to retrieve the address space object");
 
-  /*
-   * 2)
-   */
+    /*
+     * 2)
+     */
 
-  as->machine.pd = _init->machine.pd;
+    as->machine.pd = _init->machine.pd;
 
-  /*
-   * 3)
-   */
+    /*
+     * 3)
+     */
 
-  if (architecture_paging_pdbr(as->machine.pd,
-			       ARCHITECTURE_REGISTER_CR3_PCE |
-			       ARCHITECTURE_REGISTER_CR3_PWB,
-			       &pdbr) != STATUS_OK)
-    MACHINE_ESCAPE("unable to build the CR3 register's content");
+    if (architecture_paging_pdbr(as->machine.pd,
+                ARCHITECTURE_REGISTER_CR3_PCE |
+                ARCHITECTURE_REGISTER_CR3_PWB,
+                &pdbr) != STATUS_OK)
+        MACHINE_ESCAPE("unable to build the CR3 register's content");
 
-  /*
-   * 5)
-   */
+    /*
+     * 5)
+     */
 
-  /* FIXME[make the page directory provided by the boot loader the system's
-           current page directory by updating the necessary IA32 hardware
-           structure and possibly storing the value in a globally accessible
-           variable such as a manager] */
+    /* FIXME[make the page directory provided by the boot loader the system's
+       current page directory by updating the necessary IA32 hardware
+       structure and possibly storing the value in a globally accessible
+       variable such as a manager] */
 
-  /*
-   * 6)
-   */
+    /*
+     * 6)
+     */
 
-  /* FIXME[create the mirroring entry by adding the page directory's
-           address] */
+    /* FIXME[create the mirroring entry by adding the page directory's
+       address] */
 
-  /*
-   * 7)
-   */
+    /*
+     * 7)
+     */
 
-  if ((r = malloc(sizeof (o_region))) == NULL)
-    MACHINE_ESCAPE("unable to allocate memory for the region object");
+    if ((r = malloc(sizeof (o_region))) == NULL)
+        MACHINE_ESCAPE("unable to allocate memory for the region object");
 
-  r->address = ARCHITECTURE_PAGING_ADDRESS(ARCHITECTURE_PD_MIRROR, 0);
-  r->segment = ID_UNUSED;
-  r->offset = 0x0;
-  r->size = ARCHITECTURE_PT_SIZE * ___kaneton$pagesz;
-  r->options = REGION_OPTION_NONE;
+    r->address = ARCHITECTURE_PAGING_ADDRESS(ARCHITECTURE_PD_MIRROR, 0);
+    r->segment = ID_UNUSED;
+    r->offset = 0x0;
+    r->size = ARCHITECTURE_PT_SIZE * ___kaneton$pagesz;
+    r->options = REGION_OPTION_NONE;
 
-  if (region_inject(as->id, r, &useless) != STATUS_OK)
-    MACHINE_ESCAPE("unable to inject the mirroring region");
+    if (region_inject(as->id, r, &useless) != STATUS_OK)
+        MACHINE_ESCAPE("unable to inject the mirroring region");
 
-  /*
-   * 8)
-   */
+    /*
+     * 8)
+     */
 
-  /* FIXME[go through the registered regions and remove the
-           page table entries which do not correspond to these
-           regions. this is necessary because the boot loader
-           mapped an awful lot of pages which must now be cleaned]
+    /* FIXME[go through the registered regions and remove the
+       page table entries which do not correspond to these
+       regions. this is necessary because the boot loader
+       mapped an awful lot of pages which must now be cleaned]
 
-  pde.start = 0;
-  pte.start = 0;
+       pde.start = 0;
+       pte.start = 0;
 
-  for (i = 0; i < (_init->nregions + 1); i++)
-    {
-      if (i != _init->nregions)
-	{
-	  pde.end = ARCHITECTURE_PD_INDEX(_init->regions[i].address);
-	  pte.end = ARCHITECTURE_PT_INDEX(_init->regions[i].address);
-	}
-      else
-	{
-	  pde.end = ARCHITECTURE_PD_SIZE - 1;
-	  pte.end = ARCHITECTURE_PT_SIZE;
-	}
+       for (i = 0; i < (_init->nregions + 1); i++)
+       {
+       if (i != _init->nregions)
+       {
+       pde.end = ARCHITECTURE_PD_INDEX(_init->regions[i].address);
+       pte.end = ARCHITECTURE_PT_INDEX(_init->regions[i].address);
+       }
+       else
+       {
+       pde.end = ARCHITECTURE_PD_SIZE - 1;
+       pte.end = ARCHITECTURE_PT_SIZE;
+       }
 
-      for (pde.index = pde.start;
-	   pde.index <= pde.end;
-	   pde.index++)
-	{
-	  if ((pde.index != ARCHITECTURE_PD_MIRROR) &&
-	      (pd[pde.index] & ARCHITECTURE_PDE_PRESENT))
-	    {
-	      pt = (at_pt)ARCHITECTURE_PDE_ADDRESS(pd[pde.index]);
+       for (pde.index = pde.start;
+       pde.index <= pde.end;
+       pde.index++)
+       {
+       if ((pde.index != ARCHITECTURE_PD_MIRROR) &&
+       (pd[pde.index] & ARCHITECTURE_PDE_PRESENT))
+       {
+       pt = (at_pt)ARCHITECTURE_PDE_ADDRESS(pd[pde.index]);
 
-	      for (pte.index = (pde.index == pde.start ? pte.start : 0);
-		   pte.index < (pde.index == pde.end ?
-				pte.end : ARCHITECTURE_PT_SIZE);
-		   pte.index++)
-		{
-		  if (pt[pte.index] & ARCHITECTURE_PTE_PRESENT)
-		    {
-		      if (architecture_pt_delete(pt, pte.index) != STATUS_OK)
-			MACHINE_ESCAPE("unable to delete the page "
-				       "table entry");
-		    }
-		}
-	    }
-	}
+       for (pte.index = (pde.index == pde.start ? pte.start : 0);
+       pte.index < (pde.index == pde.end ?
+       pte.end : ARCHITECTURE_PT_SIZE);
+       pte.index++)
+       {
+       if (pt[pte.index] & ARCHITECTURE_PTE_PRESENT)
+       {
+       if (architecture_pt_delete(pt, pte.index) != STATUS_OK)
+       MACHINE_ESCAPE("unable to delete the page "
+       "table entry");
+       }
+       }
+       }
+       }
 
-      if (i != _init->nregions)
-	{
-	  pde.start = ARCHITECTURE_PD_INDEX(_init->regions[i].address +
-					    _init->regions[i].size);
-	  pte.start = ARCHITECTURE_PT_INDEX(_init->regions[i].address +
-					    _init->regions[i].size);
-	}
-    }
-  */
+       if (i != _init->nregions)
+       {
+       pde.start = ARCHITECTURE_PD_INDEX(_init->regions[i].address +
+       _init->regions[i].size);
+       pte.start = ARCHITECTURE_PT_INDEX(_init->regions[i].address +
+       _init->regions[i].size);
+       }
+       }
+       */
 
-  /*
-   * 9)
-   */
+    /*
+     * 9)
+     */
 
-  if (architecture_tlb_flush() != STATUS_OK)
-    MACHINE_ESCAPE("unable to flush the TLB");
+    if (architecture_tlb_flush() != STATUS_OK)
+        MACHINE_ESCAPE("unable to flush the TLB");
 
-  /*
-   * 10)
-   */
+    /*
+     * 10)
+     */
 
-  _architecture.kernel.pdbr = pdbr;
+    _architecture.kernel.pdbr = pdbr;
 
-  MACHINE_LEAVE();
+    MACHINE_LEAVE();
 }
 
 /*
@@ -292,153 +292,153 @@ t_status		architecture_environment_kernel(i_as	id)
  *    address space, note that the identity mapping technique is used here.
  */
 
-t_status		architecture_environment_server(i_as	id)
+t_status                architecture_environment_server(i_as    id)
 {
-  i_segment	        segment;
-  i_region		region;
-  o_as*			as;
-  o_region*		r;
-  o_segment*		s;
+    i_segment             segment;
+    i_region              region;
+    o_as*                 as;
+    o_region*             r;
+    o_segment*            s;
 
-  /*
-   * 1)
-   */
+    /*
+     * 1)
+     */
 
-  if (as_get(id, &as) != STATUS_OK)
-    MACHINE_ESCAPE("unable to retrieve the address space object");
+    if (as_get(id, &as) != STATUS_OK)
+        MACHINE_ESCAPE("unable to retrieve the address space object");
 
-  /*
-   * 2)
-   */
+    /*
+     * 2)
+     */
 
-  if (segment_reserve(as->id,
-		      ___kaneton$pagesz,
-		      PERMISSION_READ | PERMISSION_WRITE,
-		      SEGMENT_OPTION_SYSTEM,
-		      &segment) != STATUS_OK)
-    MACHINE_ESCAPE("unable to reserve a segment");
+    if (segment_reserve(as->id,
+                ___kaneton$pagesz,
+                PERMISSION_READ | PERMISSION_WRITE,
+                SEGMENT_OPTION_SYSTEM,
+                &segment) != STATUS_OK)
+        MACHINE_ESCAPE("unable to reserve a segment");
 
-  if (segment_get(segment, &s) != STATUS_OK)
-    MACHINE_ESCAPE("unable to retrieve the segment object");
+    if (segment_get(segment, &s) != STATUS_OK)
+        MACHINE_ESCAPE("unable to retrieve the segment object");
 
-  /*
-   * 3)
-   */
+    /*
+     * 3)
+     */
 
-  as->machine.pd = s->address;
+    as->machine.pd = s->address;
 
-  /*
-   * 4)
-   */
+    /*
+     * 4)
+     */
 
-  /* FIXME[map the server's page directory, initialize it and
-           unmap it] */
+    /* FIXME[map the server's page directory, initialize it and
+       unmap it] */
 
-  /*
-   * 5)
-   */
+    /*
+     * 5)
+     */
 
-  if (region_locate(_kernel.as,
-		    _thread.machine.tss,
-		    &region) == FALSE)
-    MACHINE_ESCAPE("unable to locate the region in which the TSS lies");
+    if (region_locate(_kernel.as,
+                _thread.machine.tss,
+                &region) == FALSE)
+        MACHINE_ESCAPE("unable to locate the region in which the TSS lies");
 
-  if (region_get(_kernel.as, region, &r) != STATUS_OK)
-    MACHINE_ESCAPE("unable to retrieve the region object");
+    if (region_get(_kernel.as, region, &r) != STATUS_OK)
+        MACHINE_ESCAPE("unable to retrieve the region object");
 
-  if (region_reserve(as->id,
-		     r->segment,
-		     0x0,
-		     REGION_OPTION_FORCE |
-		     REGION_OPTION_NONE,
-		     _thread.machine.tss,
-		     r->size,
-		     &region) != STATUS_OK)
-    MACHINE_ESCAPE("unable to reserve the region mapping the TSS");
+    if (region_reserve(as->id,
+                r->segment,
+                0x0,
+                REGION_OPTION_FORCE |
+                REGION_OPTION_NONE,
+                _thread.machine.tss,
+                r->size,
+                &region) != STATUS_OK)
+        MACHINE_ESCAPE("unable to reserve the region mapping the TSS");
 
-  /*
-   * 6)
-   */
+    /*
+     * 6)
+     */
 
-  if (region_locate(_kernel.as,
-		    (t_vaddr)_segment.machine.gdt.table,
-		    &region) == FALSE)
-    MACHINE_ESCAPE("unable to locate the region in which the GDT lies");
+    if (region_locate(_kernel.as,
+                (t_vaddr)_segment.machine.gdt.table,
+                &region) == FALSE)
+        MACHINE_ESCAPE("unable to locate the region in which the GDT lies");
 
-  if (region_get(_kernel.as, region, &r) != STATUS_OK)
-    MACHINE_ESCAPE("unable to retrieve the region object");
+    if (region_get(_kernel.as, region, &r) != STATUS_OK)
+        MACHINE_ESCAPE("unable to retrieve the region object");
 
-  if (region_reserve(as->id,
-		     r->segment,
-		     0x0,
-		     REGION_OPTION_FORCE |
-		     REGION_OPTION_NONE,
-		     (t_vaddr)_segment.machine.gdt.table,
-		     ___kaneton$pagesz,
-		     &region) != STATUS_OK)
-    MACHINE_ESCAPE("unable to reserve the region mapping the GDT");
+    if (region_reserve(as->id,
+                r->segment,
+                0x0,
+                REGION_OPTION_FORCE |
+                REGION_OPTION_NONE,
+                (t_vaddr)_segment.machine.gdt.table,
+                ___kaneton$pagesz,
+                &region) != STATUS_OK)
+        MACHINE_ESCAPE("unable to reserve the region mapping the GDT");
 
-  /*
-   * 7)
-   */
+    /*
+     * 7)
+     */
 
-  /* FIXME[reserve a region for the system's IDT very much as for
-           the GDT above] */
+    /* FIXME[reserve a region for the system's IDT very much as for
+       the GDT above] */
 
-  /*
-   * 8)
-   */
+    /*
+     * 8)
+     */
 
-  /* XXX
-     if (region_reserve(asid,
-     _init->kcode,
-     LINKER_SYMBOL(_handler_begin) - _init->kcode,
-     REGION_OPTION_FORCE | REGION_OPTION_PRIVILEGED,
-     LINKER_SYMBOL(_handler_begin),
-     LINKER_SYMBOL(_handler_end) -
-     LINKER_SYMBOL(_handler_begin),
-     &reg) != STATUS_OK)
+    /* XXX
+       if (region_reserve(asid,
+       _init->kcode,
+       LINKER_SYMBOL(_handler_begin) - _init->kcode,
+       REGION_OPTION_FORCE | REGION_OPTION_PRIVILEGED,
+       LINKER_SYMBOL(_handler_begin),
+       LINKER_SYMBOL(_handler_end) -
+       LINKER_SYMBOL(_handler_begin),
+       &reg) != STATUS_OK)
 
-     if (region_reserve(asid,
-     _init->kcode,
-     LINKER_SYMBOL(_handler_data_begin) - _init->kcode,
-     REGION_OPTION_FORCE | REGION_OPTION_PRIVILEGED,
-     LINKER_SYMBOL(_handler_data_begin),
-     LINKER_SYMBOL(_handler_data_end) -
-     LINKER_SYMBOL(_handler_data_begin),
-     &reg) != STATUS_OK)
-  */
+       if (region_reserve(asid,
+       _init->kcode,
+       LINKER_SYMBOL(_handler_data_begin) - _init->kcode,
+       REGION_OPTION_FORCE | REGION_OPTION_PRIVILEGED,
+       LINKER_SYMBOL(_handler_data_begin),
+       LINKER_SYMBOL(_handler_data_end) -
+       LINKER_SYMBOL(_handler_data_begin),
+       &reg) != STATUS_OK)
+       */
 
-  if (segment_locate(_init->kcode, &segment) == FALSE)
-    MACHINE_ESCAPE("unable to locate the segment which contains the "
-		   "kernel code");
+    if (segment_locate(_init->kcode, &segment) == FALSE)
+        MACHINE_ESCAPE("unable to locate the segment which contains the "
+                "kernel code");
 
-  if (region_reserve(as->id,
-		     segment,
-		     0x0,
-		     REGION_OPTION_FORCE,
-		     (t_vaddr)_init->kcode,
-		     (t_vsize)_init->kcodesz,
-		     &region) != STATUS_OK)
-    MACHINE_ESCAPE("unable to reserve the region mapping the kernel code");
+    if (region_reserve(as->id,
+                segment,
+                0x0,
+                REGION_OPTION_FORCE,
+                (t_vaddr)_init->kcode,
+                (t_vsize)_init->kcodesz,
+                &region) != STATUS_OK)
+        MACHINE_ESCAPE("unable to reserve the region mapping the kernel code");
 
-  /*
-   * 9)
-   */
+    /*
+     * 9)
+     */
 
-  if (segment_locate(_init->kstack,
-		     &segment) == FALSE)
-    MACHINE_ESCAPE("unable to locate the segment which contains the "
-		   "kernel stack");
+    if (segment_locate(_init->kstack,
+                &segment) == FALSE)
+        MACHINE_ESCAPE("unable to locate the segment which contains the "
+                "kernel stack");
 
-  if (region_reserve(as->id,
-		     segment,
-		     0x0,
-		     REGION_OPTION_FORCE,
-		     (t_vaddr)_init->kstack,
-		     (t_vsize)_init->kstacksz,
-		     &region) != STATUS_OK)
-    MACHINE_ESCAPE("unable to reserve the region mapping the kernel stack");
+    if (region_reserve(as->id,
+                segment,
+                0x0,
+                REGION_OPTION_FORCE,
+                (t_vaddr)_init->kstack,
+                (t_vsize)_init->kstacksz,
+                &region) != STATUS_OK)
+        MACHINE_ESCAPE("unable to reserve the region mapping the kernel stack");
 
-  MACHINE_LEAVE();
+    MACHINE_LEAVE();
 }

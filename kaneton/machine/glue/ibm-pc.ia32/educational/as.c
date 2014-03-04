@@ -35,7 +35,7 @@
  * the kernel manager.
  */
 
-extern m_kernel		_kernel;
+extern m_kernel         _kernel;
 
 /*
  * ---------- globals ---------------------------------------------------------
@@ -45,8 +45,8 @@ extern m_kernel		_kernel;
  * the address space dispatcher.
  */
 
-d_as			glue_as_dispatch =
-  {
+d_as                    glue_as_dispatch =
+{
     NULL,
     NULL,
     NULL,
@@ -58,7 +58,7 @@ d_as			glue_as_dispatch =
     NULL,
     NULL,
     NULL
-  };
+};
 
 /*
  * ---------- functions -------------------------------------------------------
@@ -70,19 +70,19 @@ d_as			glue_as_dispatch =
  * guest.
  */
 
-t_status		glue_as_reserve(i_task			task,
-					i_as*			as)
+t_status                glue_as_reserve(i_task                  task,
+                                        i_as*                   as)
 {
-  if (*as == _kernel.as)
+    if (*as == _kernel.as)
     {
-      if (architecture_environment_kernel(*as) != STATUS_OK)
-	MACHINE_ESCAPE("unable to initialize the kernel's address space");
+        if (architecture_environment_kernel(*as) != STATUS_OK)
+            MACHINE_ESCAPE("unable to initialize the kernel's address space");
     }
-  else
+    else
     {
-      if (architecture_environment_server(*as) != STATUS_OK)
-	MACHINE_ESCAPE("unable to initialize the server's address space");
+        if (architecture_environment_server(*as) != STATUS_OK)
+            MACHINE_ESCAPE("unable to initialize the server's address space");
     }
 
-  MACHINE_LEAVE();
+    MACHINE_LEAVE();
 }

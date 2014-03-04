@@ -94,7 +94,7 @@
  * the kernel manager.
  */
 
-extern m_kernel		_kernel;
+extern m_kernel         _kernel;
 
 /*
  * ---------- functions -------------------------------------------------------
@@ -113,24 +113,24 @@ extern m_kernel		_kernel;
  * 1) generate the CR3 register's content.
  */
 
-t_status		architecture_paging_pdbr(t_paddr	pd,
-						 t_flags	flags,
-						 at_cr3*	pdbr)
+t_status                architecture_paging_pdbr(t_paddr        pd,
+        t_flags        flags,
+        at_cr3*        pdbr)
 {
-  /*
-   * 0)
-   */
+    /*
+     * 0)
+     */
 
-  if (pdbr == NULL)
-    MACHINE_ESCAPE("the 'pdbr' argument is null");
+    if (pdbr == NULL)
+        MACHINE_ESCAPE("the 'pdbr' argument is null");
 
-  /*
-   * 1)
-   */
+    /*
+     * 1)
+     */
 
-  *pdbr = (pd & 0xfffff000) | flags;
+    *pdbr = (pd & 0xfffff000) | flags;
 
-  MACHINE_LEAVE();
+    MACHINE_LEAVE();
 }
 
 /*
@@ -138,16 +138,16 @@ t_status		architecture_paging_pdbr(t_paddr	pd,
  * address.
  */
 
-t_status		architecture_paging_map(i_as		id,
-						i_segment	segment,
-						t_paddr		offset,
-						t_options	options,
-						t_vaddr		address,
-						t_vsize		size)
+t_status                architecture_paging_map(i_as            id,
+                                                i_segment       segment,
+                                                t_paddr         offset,
+                                                t_options       options,
+                                                t_vaddr         address,
+                                                t_vsize         size)
 {
-  /* FIXME[code to complete] */
+    /* FIXME[code to complete] */
 
-  MACHINE_LEAVE();
+    MACHINE_LEAVE();
 }
 
 /*
@@ -155,13 +155,13 @@ t_status		architecture_paging_map(i_as		id,
  * size.
  */
 
-t_status		architecture_paging_unmap(i_as		id,
-						  t_vaddr	address,
-						  t_vsize	size)
+t_status                architecture_paging_unmap(i_as          id,
+        t_vaddr       address,
+        t_vsize       size)
 {
-  /* FIXME[code to complete] */
+    /* FIXME[code to complete] */
 
-  MACHINE_LEAVE();
+    MACHINE_LEAVE();
 }
 
 /*
@@ -182,88 +182,88 @@ t_status		architecture_paging_unmap(i_as		id,
  * 7) release the region.
  */
 
-t_status		architecture_paging_read(i_segment	id,
-						 t_paddr	offset,
-						 void*		buffer,
-						 t_psize	size)
+t_status                architecture_paging_read(i_segment      id,
+        t_paddr        offset,
+        void*          buffer,
+        t_psize        size)
 {
-  t_paddr		shift;
-  i_region		region;
-  t_paddr		end;
-  o_segment*		o;
-  o_region*		r;
+    t_paddr               shift;
+    i_region              region;
+    t_paddr               end;
+    o_segment*            o;
+    o_region*             r;
 
-  /*
-   * 0)
-   */
+    /*
+     * 0)
+     */
 
-  if (buffer == NULL)
-    MACHINE_ESCAPE("the 'buffer' argument is null");
+    if (buffer == NULL)
+        MACHINE_ESCAPE("the 'buffer' argument is null");
 
-  /*
-   * 1)
-   */
+    /*
+     * 1)
+     */
 
-  if (segment_get(id, &o) != STATUS_OK)
-    MACHINE_ESCAPE("unable to retrieve the segment object");
+    if (segment_get(id, &o) != STATUS_OK)
+        MACHINE_ESCAPE("unable to retrieve the segment object");
 
-  /*
-   * 2)
-   */
+    /*
+     * 2)
+     */
 
-  if (offset % ___kaneton$pagesz)
+    if (offset % ___kaneton$pagesz)
     {
-      shift = offset - (offset & ~(___kaneton$pagesz - 1));
-      offset = offset & ~(___kaneton$pagesz - 1);
+        shift = offset - (offset & ~(___kaneton$pagesz - 1));
+        offset = offset & ~(___kaneton$pagesz - 1);
     }
-  else
+    else
     {
-      shift = 0;
+        shift = 0;
     }
 
-  /*
-   * 3)
-   */
+    /*
+     * 3)
+     */
 
-  end = offset + shift + size;
+    end = offset + shift + size;
 
-  if (end % ___kaneton$pagesz)
-    end = (end & ~(___kaneton$pagesz - 1)) + ___kaneton$pagesz;
+    if (end % ___kaneton$pagesz)
+        end = (end & ~(___kaneton$pagesz - 1)) + ___kaneton$pagesz;
 
-  /*
-   * 4)
-   */
+    /*
+     * 4)
+     */
 
-  if (region_reserve(_kernel.as,
-		     id,
-		     offset,
-		     REGION_OPTION_NONE,
-		     0x0,
-		     end - offset,
-		     &region) != STATUS_OK)
-    MACHINE_ESCAPE("unable to reserve a region");
+    if (region_reserve(_kernel.as,
+                id,
+                offset,
+                REGION_OPTION_NONE,
+                0x0,
+                end - offset,
+                &region) != STATUS_OK)
+        MACHINE_ESCAPE("unable to reserve a region");
 
-  /*
-   * 5)
-   */
+    /*
+     * 5)
+     */
 
-  if (region_get(_kernel.as, region, &r) != STATUS_OK)
-    MACHINE_ESCAPE("unable to retrieve the region object");
+    if (region_get(_kernel.as, region, &r) != STATUS_OK)
+        MACHINE_ESCAPE("unable to retrieve the region object");
 
-  /*
-   * 6)
-   */
+    /*
+     * 6)
+     */
 
-  memcpy(buffer, (void*)r->address + shift, size);
+    memcpy(buffer, (void*)r->address + shift, size);
 
-  /*
-   * 7)
-   */
+    /*
+     * 7)
+     */
 
-  if (region_release(_kernel.as, region) != STATUS_OK)
-    MACHINE_ESCAPE("unable to release the region");
+    if (region_release(_kernel.as, region) != STATUS_OK)
+        MACHINE_ESCAPE("unable to release the region");
 
-  MACHINE_LEAVE();
+    MACHINE_LEAVE();
 }
 
 /*
@@ -284,88 +284,88 @@ t_status		architecture_paging_read(i_segment	id,
  * 7) release the region.
  */
 
-t_status		architecture_paging_write(i_segment	id,
-						  t_paddr	offset,
-						  const void*	buffer,
-						  t_psize	size)
+t_status                architecture_paging_write(i_segment     id,
+        t_paddr       offset,
+        const void*   buffer,
+        t_psize       size)
 {
-  t_paddr		shift;
-  i_region		region;
-  t_paddr		end;
-  o_segment*		o;
-  o_region*		r;
+    t_paddr               shift;
+    i_region              region;
+    t_paddr               end;
+    o_segment*            o;
+    o_region*             r;
 
-  /*
-   * 0)
-   */
+    /*
+     * 0)
+     */
 
-  if (buffer == NULL)
-    MACHINE_ESCAPE("the 'buffer' argument is null");
+    if (buffer == NULL)
+        MACHINE_ESCAPE("the 'buffer' argument is null");
 
-  /*
-   * 1)
-   */
+    /*
+     * 1)
+     */
 
-  if (segment_get(id, &o) != STATUS_OK)
-    MACHINE_ESCAPE("unable to retrieve the segment object");
+    if (segment_get(id, &o) != STATUS_OK)
+        MACHINE_ESCAPE("unable to retrieve the segment object");
 
-  /*
-   * 2)
-   */
+    /*
+     * 2)
+     */
 
-  if (offset % ___kaneton$pagesz)
+    if (offset % ___kaneton$pagesz)
     {
-      shift = offset - (offset & ~(___kaneton$pagesz - 1));
-      offset = offset & ~(___kaneton$pagesz - 1);
+        shift = offset - (offset & ~(___kaneton$pagesz - 1));
+        offset = offset & ~(___kaneton$pagesz - 1);
     }
-  else
+    else
     {
-      shift = 0;
+        shift = 0;
     }
 
-  /*
-   * 3)
-   */
+    /*
+     * 3)
+     */
 
-  end = offset + shift + size;
+    end = offset + shift + size;
 
-  if (end % ___kaneton$pagesz)
-    end = (end & ~(___kaneton$pagesz - 1)) + ___kaneton$pagesz;
+    if (end % ___kaneton$pagesz)
+        end = (end & ~(___kaneton$pagesz - 1)) + ___kaneton$pagesz;
 
-  /*
-   * 4)
-   */
+    /*
+     * 4)
+     */
 
-  if (region_reserve(_kernel.as,
-		     id,
-		     offset,
-		     REGION_OPTION_NONE,
-		     0x0,
-		     end - offset,
-		     &region) != STATUS_OK)
-    MACHINE_ESCAPE("unable to reserve a region");
+    if (region_reserve(_kernel.as,
+                id,
+                offset,
+                REGION_OPTION_NONE,
+                0x0,
+                end - offset,
+                &region) != STATUS_OK)
+        MACHINE_ESCAPE("unable to reserve a region");
 
-  /*
-   * 5)
-   */
+    /*
+     * 5)
+     */
 
-  if (region_get(_kernel.as, region, &r) != STATUS_OK)
-    MACHINE_ESCAPE("unable to retrieve the region object");
+    if (region_get(_kernel.as, region, &r) != STATUS_OK)
+        MACHINE_ESCAPE("unable to retrieve the region object");
 
-  /*
-   * 6)
-   */
+    /*
+     * 6)
+     */
 
-  memcpy((void*)r->address + shift, buffer, size);
+    memcpy((void*)r->address + shift, buffer, size);
 
-  /*
-   * 7)
-   */
+    /*
+     * 7)
+     */
 
-  if (region_release(_kernel.as, region) != STATUS_OK)
-    MACHINE_ESCAPE("unable to release the region");
+    if (region_release(_kernel.as, region) != STATUS_OK)
+        MACHINE_ESCAPE("unable to release the region");
 
-  MACHINE_LEAVE();
+    MACHINE_LEAVE();
 }
 
 /*
@@ -389,157 +389,157 @@ t_status		architecture_paging_write(i_segment	id,
  * 11) release the reserved regions.
  */
 
-t_status		architecture_paging_copy(i_region	dst,
-						 t_paddr	to,
-						 i_region	src,
-						 t_paddr	from,
-						 t_psize	size)
+t_status                architecture_paging_copy(i_region       dst,
+        t_paddr        to,
+        i_region       src,
+        t_paddr        from,
+        t_psize        size)
 {
-  struct
-  {
     struct
     {
-      o_segment*	object;
-    }			segment;
+        struct
+        {
+            o_segment*        object;
+        }                   segment;
+        struct
+        {
+            i_region          id;
+            o_region*         object;
+        }                   region;
+        t_paddr             shift;
+    }                     source;
     struct
     {
-      i_region		id;
-      o_region*		object;
-    }			region;
-    t_paddr		shift;
-  }			source;
-  struct
-  {
-    struct
+        struct
+        {
+            o_segment*        object;
+        }                   segment;
+        struct
+        {
+            i_region          id;
+            o_region*         object;
+        }                   region;
+        t_paddr             shift;
+    }                     destination;
+    t_paddr               end;
+
+    /*
+     * 1)
+     */
+
+    if (segment_get(dst, &destination.segment.object) != STATUS_OK)
+        MACHINE_ESCAPE("unable to retrieve the segment object");
+
+    if (segment_get(src, &source.segment.object) != STATUS_OK)
+        MACHINE_ESCAPE("unable to retrieve the segment object");
+
+    /*
+     * 2)
+     */
+
+    if (from % ___kaneton$pagesz)
     {
-      o_segment*	object;
-    }			segment;
-    struct
-    {
-      i_region		id;
-      o_region*		object;
-    }			region;
-    t_paddr		shift;
-  }			destination;
-  t_paddr		end;
-
-  /*
-   * 1)
-   */
-
-  if (segment_get(dst, &destination.segment.object) != STATUS_OK)
-    MACHINE_ESCAPE("unable to retrieve the segment object");
-
-  if (segment_get(src, &source.segment.object) != STATUS_OK)
-    MACHINE_ESCAPE("unable to retrieve the segment object");
-
-  /*
-   * 2)
-   */
-
-  if (from % ___kaneton$pagesz)
-    {
-      source.shift = from - (from & ~(___kaneton$pagesz - 1));
-      from = from & ~(___kaneton$pagesz - 1);
+        source.shift = from - (from & ~(___kaneton$pagesz - 1));
+        from = from & ~(___kaneton$pagesz - 1);
     }
-  else
+    else
     {
-      source.shift = 0;
+        source.shift = 0;
     }
 
-  /*
-   * 3)
-   */
+    /*
+     * 3)
+     */
 
-  end = from + source.shift + size;
+    end = from + source.shift + size;
 
-  if (end % ___kaneton$pagesz)
-    end = (end & ~(___kaneton$pagesz - 1)) + ___kaneton$pagesz;
+    if (end % ___kaneton$pagesz)
+        end = (end & ~(___kaneton$pagesz - 1)) + ___kaneton$pagesz;
 
-  /*
-   * 4)
-   */
+    /*
+     * 4)
+     */
 
-  if (region_reserve(_kernel.as,
-		     src,
-		     from,
-		     REGION_OPTION_NONE,
-		     0x0,
-		     end - from,
-		     &source.region.id) != STATUS_OK)
-    MACHINE_ESCAPE("unable to reserve a region");
+    if (region_reserve(_kernel.as,
+                src,
+                from,
+                REGION_OPTION_NONE,
+                0x0,
+                end - from,
+                &source.region.id) != STATUS_OK)
+        MACHINE_ESCAPE("unable to reserve a region");
 
-  /*
-   * 5)
-   */
+    /*
+     * 5)
+     */
 
-  if (region_get(_kernel.as,
-		 source.region.id,
-		 &source.region.object) != STATUS_OK)
-    MACHINE_ESCAPE("unable to retrieve the region object");
+    if (region_get(_kernel.as,
+                source.region.id,
+                &source.region.object) != STATUS_OK)
+        MACHINE_ESCAPE("unable to retrieve the region object");
 
-  /*
-   * 6)
-   */
+    /*
+     * 6)
+     */
 
-  if (to % ___kaneton$pagesz)
+    if (to % ___kaneton$pagesz)
     {
-      destination.shift = to - (to & ~(___kaneton$pagesz - 1));
-      to = to & ~(___kaneton$pagesz - 1);
+        destination.shift = to - (to & ~(___kaneton$pagesz - 1));
+        to = to & ~(___kaneton$pagesz - 1);
     }
-  else
+    else
     {
-      destination.shift = 0;
+        destination.shift = 0;
     }
 
-  /*
-   * 7)
-   */
+    /*
+     * 7)
+     */
 
-  end = to + destination.shift + size;
+    end = to + destination.shift + size;
 
-  if (end % ___kaneton$pagesz)
-    end = (end & ~(___kaneton$pagesz - 1)) + ___kaneton$pagesz;
+    if (end % ___kaneton$pagesz)
+        end = (end & ~(___kaneton$pagesz - 1)) + ___kaneton$pagesz;
 
-  /*
-   * 8)
-   */
+    /*
+     * 8)
+     */
 
-  if (region_reserve(_kernel.as,
-		     dst,
-		     to,
-		     REGION_OPTION_NONE,
-		     0x0,
-		     end - to,
-		     &destination.region.id) != STATUS_OK)
-    MACHINE_ESCAPE("unable to reserve a region");
+    if (region_reserve(_kernel.as,
+                dst,
+                to,
+                REGION_OPTION_NONE,
+                0x0,
+                end - to,
+                &destination.region.id) != STATUS_OK)
+        MACHINE_ESCAPE("unable to reserve a region");
 
-  /*
-   * 9)
-   */
+    /*
+     * 9)
+     */
 
-  if (region_get(_kernel.as,
-		 destination.region.id,
-		 &destination.region.object) != STATUS_OK)
-    MACHINE_ESCAPE("unable to retrieve the region object");
+    if (region_get(_kernel.as,
+                destination.region.id,
+                &destination.region.object) != STATUS_OK)
+        MACHINE_ESCAPE("unable to retrieve the region object");
 
-  /*
-   * 10)
-   */
+    /*
+     * 10)
+     */
 
-  memcpy((void*)destination.region.object->address + destination.shift,
-	 (void*)source.region.object->address + source.shift,
-	 size);
+    memcpy((void*)destination.region.object->address + destination.shift,
+            (void*)source.region.object->address + source.shift,
+            size);
 
-  /*
-   * 11)
-   */
+    /*
+     * 11)
+     */
 
-  if (region_release(_kernel.as, source.region.id) != STATUS_OK)
-    MACHINE_ESCAPE("unable to release the region");
+    if (region_release(_kernel.as, source.region.id) != STATUS_OK)
+        MACHINE_ESCAPE("unable to release the region");
 
-  if (region_release(_kernel.as, destination.region.id) != STATUS_OK)
-    MACHINE_ESCAPE("unable to release the region");
+    if (region_release(_kernel.as, destination.region.id) != STATUS_OK)
+        MACHINE_ESCAPE("unable to release the region");
 
-  MACHINE_LEAVE();
+    MACHINE_LEAVE();
 }
