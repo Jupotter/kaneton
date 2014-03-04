@@ -114,8 +114,8 @@ extern m_kernel         _kernel;
  */
 
 t_status                architecture_paging_pdbr(t_paddr        pd,
-        t_flags        flags,
-        at_cr3*        pdbr)
+                                                 t_flags        flags,
+                                                 at_cr3*        pdbr)
 {
     /*
      * 0)

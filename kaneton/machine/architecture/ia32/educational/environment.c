@@ -138,6 +138,7 @@ t_status                architecture_environment_kernel(i_as    id)
     at_cr3                pdbr;
     o_as*                 as;
     o_region*             r;
+    as_pd                 pd;
 
     /*
      * 1)
@@ -166,17 +167,21 @@ t_status                architecture_environment_kernel(i_as    id)
      * 5)
      */
 
-    /* FIXME[make the page directory provided by the boot loader the system's
-       current page directory by updating the necessary IA32 hardware
-       structure and possibly storing the value in a globally accessible
-       variable such as a manager] */
+    module_call(console, message,
+            '#', "Setting up the PD\n");
+
+    ARCHITECTURE_LCR3(pdbr);
 
     /*
      * 6)
      */
 
-    /* FIXME[create the mirroring entry by adding the page directory's
-       address] */
+    pd.table = (at_pde*)pdbr;
+    pd.table[ARCHITECTURE_PD_MIRROR] =
+        ARCHITECTURE_PDE(pdbr, ARCHITECTURE_PD_OTHER
+                             | ARCHITECTURE_PD_SUPERVISOR
+                             | ARCHITECTURE_PD_RW
+                             | ARCHITECTURE_PD_PRESENT);
 
     /*
      * 7)
