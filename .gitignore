@@ -4,9 +4,12 @@
 *.img
 .current
 .dependency.mk
+log
+serial
 export/
 kaneton/kaneton
 kaneton/core/version.c
 environment/env.*
 environment/critical.pyc
+test/
 
