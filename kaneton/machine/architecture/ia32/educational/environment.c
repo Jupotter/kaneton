@@ -167,9 +167,6 @@ t_status                architecture_environment_kernel(i_as    id)
      * 5)
      */
 
-    module_call(console, message,
-            '#', "Setting up the PD\n");
-
     ARCHITECTURE_LCR3(pdbr);
 
     /*
