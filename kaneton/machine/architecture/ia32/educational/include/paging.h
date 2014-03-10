@@ -56,24 +56,24 @@ t_status                architecture_paging_map(i_as            id,
                                                 t_vsize         size);
 
 t_status                architecture_paging_unmap(i_as          id,
-                                                  t_vaddr       address,
-                                                  t_vsize       size);
+        t_vaddr       address,
+        t_vsize       size);
 
 t_status                architecture_paging_read(i_segment      id,
-                                                 t_paddr        offset,
-                                                 void*          buffer,
-                                                 t_psize        size);
+        t_paddr        offset,
+        void*          buffer,
+        t_psize        size);
 
 t_status                architecture_paging_write(i_segment     id,
-                                                  t_paddr       offset,
-                                                  const void*   buffer,
-                                                  t_psize       size);
+        t_paddr       offset,
+        const void*   buffer,
+        t_psize       size);
 
 t_status                architecture_paging_copy(i_region       dst,
-                                                 t_paddr        to,
-                                                 i_region       src,
-                                                 t_paddr        from,
-                                                 t_psize        size);
+        t_paddr        to,
+        i_region       src,
+        t_paddr        from,
+        t_psize        size);
 
 
 /*

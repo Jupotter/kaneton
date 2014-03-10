@@ -129,6 +129,14 @@ void			kaneton(s_init*				init)
    * 6)
    */
 
+  event_reserve(ARCHITECTURE_IDT_EXCEPTION_PF,
+                0,
+                EVENT_ROUTINE(architecture_handler_keyboard),
+                0);
+
+  module_call(console, message,
+	      '+', "Testing paging\n");
+  architecture_kernel_pd_create_pt(0x12345678, ARCHITECTURE_PD_KER_STD);
   module_call(test, run);
 
   /*

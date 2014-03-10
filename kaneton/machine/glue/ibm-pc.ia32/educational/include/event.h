@@ -77,9 +77,6 @@
 
 t_status glue_event_dump(void);
 
-t_status                glue_event_show(i_event                id,
-        mt_margin              margin);
-
 t_status                glue_event_enable(void);
 
 t_status                glue_event_disable(void);

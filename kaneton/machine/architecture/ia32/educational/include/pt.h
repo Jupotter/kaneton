@@ -31,6 +31,18 @@
 #include <architecture/types.h>
 
 /*
+ * ---------- types -----------------------------------------------------------
+ */
+
+typedef t_uint32 at_pte;
+
+typedef struct pt
+{
+    at_pte* table;
+}           as_pt;
+
+
+/*
  * ---------- prototypes ------------------------------------------------------
  *
  *      ../pt.c

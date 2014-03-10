@@ -37,8 +37,29 @@
 
 #define ARCHITECTURE_PD_OTHER           (0b000000 << 3)
 
+#define ARCHITECTURE_PD_KER_STD                                              \
+    (ARCHITECTURE_PD_OTHER                                                   \
+    |ARCHITECTURE_PD_SUPERVISOR                                              \
+    |ARCHITECTURE_PD_RW                                                      \
+    |ARCHITECTURE_PD_PRESENT)
+
 #define ARCHITECTURE_PDE(_ADDR_, _BITS_)                                     \
-    (((_ADDR_) & 0xFF00)|((_BITS_) & 0x00FF))
+    (((_ADDR_) & 0xFFFFE00)|((_BITS_) & 0x00000FF))
+
+#define ARCHITECTURE_PD_ENTRY(_NUM_)                                         \
+    (((ARCHITECTURE_PD_MIRROR) << 22)                                        \
+    |((ARCHITECTURE_PD_MIRROR) << 12)                                        \
+    |(((_NUM_) & (0x3FF << 22)) >> 20))
+
+#define ARCHITECTURE_PT_ENTRY(_NUM_)                                         \
+    (((ARCHITECTURE_PD_MIRROR) << 22)                                        \
+    |(((_NUM_) & (0x3FF << 22)) >> 10)                                       \
+    |(((_NUM_) & (0x3FF << 12)) >> 12))
+
+#define ARCHITECTURE_PT_BASE(_NUM_)                                          \
+    (((ARCHITECTURE_PD_MIRROR) << 22)                                        \
+    |(((_NUM_) & (0x3FF << 22)) >> 10)                                       \
+    |(0x000))
 
 /*
  * ---------- dependencies ----------------------------------------------------
@@ -58,6 +79,12 @@ typedef struct pd
 }           as_pd;
 
 /*
+** --------- globals ----------------------------------------------------------
+*/
+
+as_pd _pd;
+
+/*
  * ---------- prototypes ------------------------------------------------------
  *
  *      ../pd.c
@@ -66,6 +93,9 @@ typedef struct pd
 /*
  * ../pd.c
  */
+
+t_status architecture_kernel_pd_create_pt(t_uint32 address,
+                                          t_uint32 flags);
 
 
 /*

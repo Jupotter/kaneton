@@ -180,6 +180,8 @@ t_status                architecture_environment_kernel(i_as    id)
                              | ARCHITECTURE_PD_RW
                              | ARCHITECTURE_PD_PRESENT);
 
+    _pd.table = pd.table;
+
     /*
      * 7)
      */
