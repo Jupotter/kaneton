@@ -29,4 +29,10 @@
  * ---------- functions -------------------------------------------------------
  */
 
+t_status architecture_pt_create_page(t_uint32 addr)
+{
+
+    MACHINE_LEAVE();
+}
+
 /* FIXME[complete if necessary] */

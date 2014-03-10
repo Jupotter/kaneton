@@ -52,6 +52,8 @@ typedef struct pt
  * ../pt.c
  */
 
+t_status architecture_pt_create_page(t_uint32 addr);
+
 
 /*
  * eop

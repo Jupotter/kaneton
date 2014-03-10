@@ -61,6 +61,9 @@
     |(((_NUM_) & (0x3FF << 22)) >> 10)                                       \
     |(0x000))
 
+#define ARCHITECTURE_PD_PADDR(_VADDR_)                                       \
+    ((_VADDR_) & 0xFFFFE00)
+
 /*
  * ---------- dependencies ----------------------------------------------------
  */
@@ -96,6 +99,8 @@ as_pd _pd;
 
 t_status architecture_kernel_pd_create_pt(t_uint32 address,
                                           t_uint32 flags);
+
+t_status architecture_kernel_pd_free_pt(t_uint32 address);
 
 
 /*
